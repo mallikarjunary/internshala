@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website with Pricing, Home, and Contact</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body[data-theme='dark'] {
+            background-color: #1a202c;
+            color: #cbd5e0;
+        }
+        body[data-theme='light'] {
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        .highlight {
+            border: 2px solid #4a90e2;
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+        }
+        .tooltip {
+            position: absolute;
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            display: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Navigation -->
+    <nav class="bg-blue-500 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">My Website</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#home" class="hover:underline">Home</a></li>
+                <li><a href="#pricing" class="hover:underline">Pricing</a></li>
+                <li><a href="#contact" class="hover:underline">Contact</a></li>
+            </ul>
+            <button id="theme-toggle" class="ml-4 p-2 bg-blue-700 rounded focus:outline-none">Toggle Dark Mode</button>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="container mx-auto px-4 py-8 text-center">
+        <h2 class="text-4xl font-bold mb-4">Welcome to Our Website</h2>
+        <p class="text-lg mb-6">We offer the best plans for your needs. Explore our pricing options below and find the perfect fit for you.</p>
+        <a href="#pricing" class="bg-blue-500 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600 transition duration-300">View Pricing Plans</a>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="container mx-auto px-4 py-8 text-center">
+        <h2 class="text-3xl font-bold mb-6">Our Pricing Plans</h2>
+        <div class="relative flex flex-wrap justify-center gap-4">
+            <!-- Tooltip Template -->
+            <div id="tooltip" class="tooltip"></div>
+
+            <!-- Plan 1 -->
+            <div id="basic-plan" class="relative max-w-xs w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-lg shadow-md p-6 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300" 
+                 aria-labelledby="basic-plan-title" aria-describedby="basic-plan-desc" data-tooltip="Basic Plan includes essential features">
+                <h3 id="basic-plan-title" class="text-2xl font-semibold mb-4">Basic Plan</h3>
+                <p id="basic-plan-desc" class="text-lg mb-4">$19/month</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li>5 GB Storage</li>
+                    <li>Email Support</li>
+                    <li>Limited Reporting Tools</li>
+                </ul>
+                <button onclick="subscribe('Basic Plan')" class="bg-blue-500 text-white py-2 px-4 rounded focus:outline-none">Subscribe</button>
+            </div>
+
+            <!-- Plan 2 (Highlighted) -->
+            <div id="pro-plan" class="relative max-w-xs w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-lg shadow-md p-6 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300 highlight"
+                 aria-labelledby="pro-plan-title" aria-describedby="pro-plan-desc" data-tooltip="Pro Plan includes more features and priority support">
+                <h3 id="pro-plan-title" class="text-2xl font-semibold mb-4">Pro Plan</h3>
+                <p id="pro-plan-desc" class="text-lg mb-4">$39/month</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li>20 GB Storage</li>
+                    <li>Priority email and chat support</li>
+                    <li>Customizable dashboards and reports</li>
+                </ul>
+                <button onclick="subscribe('Pro Plan')" class="bg-blue-500 text-white py-2 px-4 rounded focus:outline-none">Subscribe</button>
+            </div>
+
+            <!-- Plan 3 -->
+            <div id="enterprise-plan" class="relative max-w-xs w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-lg shadow-md p-6 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300"
+                 aria-labelledby="enterprise-plan-title" aria-describedby="enterprise-plan-desc" data-tooltip="Enterprise Plan includes all features and custom solutions">
+                <h3 id="enterprise-plan-title" class="text-2xl font-semibold mb-4">Enterprise Plan</h3>
+                <p id="enterprise-plan-desc" class="text-lg mb-4">$99/month</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li>100 GB Storage</li>
+                    <li>24/7 phone and priority support</li>
+                    <li>Advanced security features (e.g., encryption, compliance)</li>
+                    <li>Custom feature requests and early access to new tools</li>
+                </ul>
+                <button onclick="subscribe('Enterprise Plan')" class="bg-blue-500 text-white py-2 px-4 rounded focus:outline-none">Subscribe</button>
+            </div>
+        </div>
+
+        <!-- Subscription Confirmation -->
+        <div id="confirmation" class="mt-8 p-4 bg-green-100 text-green-800 rounded-lg hidden" role="alert">
+            <p id="confirmation-message"></p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="container mx-auto px-4 py-8 text-center">
+        <h2 class="text-3xl font-bold mb-6">Contact Us</h2>
+        <p class="text-lg mb-6">We’d love to hear from you. Reach out with any questions or feedback.</p>
+        <form class="max-w-lg mx-auto">
+            <div class="mb-4">
+                <label for="name" class="block text-left text-lg mb-2">Name</label>
+                <input type="text" id="name" class="w-full p-2 border rounded" placeholder="Your name">
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-left text-lg mb-2">Email</label>
+                <input type="email" id="email" class="w-full p-2 border rounded" placeholder="Your email">
+            </div>
+            <div class="mb-4">
+                <label for="message" class="block text-left text-lg mb-2">Message</label>
+                <textarea id="message" class="w-full p-2 border rounded" rows="4" placeholder="Your message"></textarea>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600 transition duration-300">Send Message</button>
+        </form>
+    </section>
+
+    <script>
+        // Theme Toggle Script
+        const themeToggleButton = document.getElementById('theme-toggle');
+        themeToggleButton.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+        });
+
+        // Tooltip Functionality
+        const tooltips = document.querySelectorAll('[data-tooltip]');
+        tooltips.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.textContent = element.getAttribute('data-tooltip');
+                tooltip.style.display = 'block';
+                tooltip.style.top = `${element.getBoundingClientRect().top + window.scrollY + 10}px`;
+                tooltip.style.left = `${element.getBoundingClientRect().left + window.scrollX}px`;
+            });
+
+            element.addEventListener('mouseleave', () => {
+                document.getElementById('tooltip').style.display = 'none';
+            });
+        });
+
+        // Handle Subscription
+        function subscribe(planName) {
+            // Display confirmation message
+            const confirmation = document.getElementById('confirmation');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            confirmationMessage.textContent = `You have subscribed to the ${planName}! Thank you for choosing our service.`;
+            confirmation.classList.remove('hidden');
+            confirmation.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
